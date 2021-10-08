@@ -102,4 +102,28 @@ def CodeRange(code1, code2):
 #
 
 class RE:
-	"""RE is the base class 
+	"""RE is the base class for regular expression constructors.
+	The following operators are defined on REs:
+
+		 re1 + re2		 is an RE which matches |re1| followed by |re2|
+		 re1 | re2		 is an RE which matches either |re1| or |re2|
+	"""
+
+	nullable = 1 # True if this RE can match 0 input symbols
+	match_nl = 1 # True if this RE can match a string ending with '\n'
+	str = None	 # Set to a string to override the class's __str__ result
+	
+	def build_machine(self, machine, initial_state, final_state, 
+										match_bol, nocase):
+		"""
+		This method should add states to |machine| to implement this
+		RE, starting at |initial_state| and ending at |final_state|.
+		If |match_bol| is true, the RE must be able to match at the
+		beginning of a line. If nocase is true, upper and lower case
+		letters should be treated as equivalent.
+		"""
+		raise exceptions.UnimplementedMethod("%s.build_machine not implemented" % 
+			self.__class__.__name__)
+	
+	def build_opt(self, m, initial_state, c):
+		"
