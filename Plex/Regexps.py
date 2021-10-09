@@ -126,4 +126,42 @@ class RE:
 			self.__class__.__name__)
 	
 	def build_opt(self, m, initial_state, c):
-		"
+		"""
+		Given a state |s| of machine |m|, return a new state
+		reachable from |s| on character |c| or epsilon.
+		"""
+		s = m.new_state()
+		initial_state.link_to(s)
+		initial_state.add_transition(c, s)
+		return s
+
+	def __add__(self, other):
+		return Seq(self, other)
+
+	def __or__(self, other):
+		return Alt(self, other)
+
+	def __str__(self):
+		if self.str:
+			return self.str
+		else:
+			return self.calc_str()
+
+	def check_re(self, num, value):
+		if not isinstance(value, RE):
+			self.wrong_type(num, value, "Plex.RE instance")
+
+	def check_string(self, num, value):
+		if type(value) <> type(''):
+			self.wrong_type(num, value, "string")
+	
+	def check_char(self, num, value):
+		self.check_string(num, value)
+		if len(value) <> 1:
+			raise Errors.PlexValueError("Invalid value for argument %d of Plex.%s."
+				"Expected a string of length 1, got: %s" % (
+					num, self.__class__.__name__, repr(value)))
+
+	def wrong_type(self, num, value, expected):
+		if type(value) == types.InstanceType:
+	
