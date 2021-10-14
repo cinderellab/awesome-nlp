@@ -164,4 +164,40 @@ class RE:
 
 	def wrong_type(self, num, value, expected):
 		if type(value) == types.InstanceType:
+				got = "%s.%s instance" % (
+					value.__class__.__module__, value.__class__.__name__)
+		else:
+			got = type(value).__name__
+		raise Errors.PlexTypeError("Invalid type for argument %d of Plex.%s "
+										"(expected %s, got %s" % (
+											num, self.__class__.__name__, expected, got))
 	
+#
+#	 Primitive RE constructors
+#	 -------------------------
+#
+#	 These are the basic REs from which all others are built.
+#
+
+## class Char(RE):
+##	 """
+##	 Char(c) is an RE which matches the character |c|.
+##	 """
+	
+##	 nullable = 0
+	
+##	 def __init__(self, char):
+##		 self.char = char
+##		 self.match_nl = char == '\n'
+		
+##	 def build_machine(self, m, initial_state, final_state, match_bol, nocase):
+##		 c = self.char
+##		 if match_bol and c <> BOL:
+##			 s1 = self.build_opt(m, initial_state, BOL)
+##		 else:
+##			 s1 = initial_state
+##		 if c == '\n' or c == EOF:
+##			 s1 = self.build_opt(m, s1, EOL)
+##		 if len(c) == 1:
+##			 code = ord(self.char)
+##			 
