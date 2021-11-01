@@ -200,4 +200,39 @@ class RE:
 ##			 s1 = self.build_opt(m, s1, EOL)
 ##		 if len(c) == 1:
 ##			 code = ord(self.char)
-##			 
+##			 s1.add_transition((code, code+1), final_state)
+##			 if nocase and is_letter_code(code):
+##				 code2 = other_case_code(code)
+##				 s1.add_transition((code2, code2+1), final_state)
+##		 else:
+##			 s1.add_transition(c, final_state)
+
+##	 def calc_str(self):
+##		 return "Char(%s)" % repr(self.char)
+
+def Char(c):
+	"""
+	Char(c) is an RE which matches the character |c|.
+	"""
+	if len(c) == 1:
+		result = CodeRange(ord(c), ord(c) + 1)
+	else:
+		result = SpecialSymbol(c)
+	result.str = "Char(%s)" % repr(c)
+	return result
+
+class RawCodeRange(RE):
+	"""
+	RawCodeRange(code1, code2) is a low-level RE which matches any character
+	with a code |c| in the range |code1| <= |c| < |code2|, where the range
+	does not include newline. For internal use only.
+	"""
+	nullable = 0
+	match_nl = 0
+	range = None					 # (code, code)
+	uppercase_range = None # (code, code) or None
+	lowercase_range = None # (code, code) or None
+	
+	def __init__(self, code1, code2):
+		self.range = (code1, code2)
+		self.uppercase_range = uppercase_
