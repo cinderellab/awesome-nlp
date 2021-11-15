@@ -304,4 +304,47 @@ class Seq(RE):
 		match_nl = 0
 		while i:
 			i = i - 1
+			re = re_list[i]
+			if re.match_nl:
+				match_nl = 1
+				break
+			if not re.nullable:
+				break
+		self.match_nl = match_nl
+		
+	def build_machine(self, m, initial_state, final_state, match_bol, nocase):
+		re_list = self.re_list
+		if len(re_list) == 0:
+			initial_state.link_to(final_state)
+		else:
+			s1 = initial_state
+			n = len(re_list)
+			for i in xrange(n):
+				if i < n - 1:
+					s2 = m.new_state()
+				else:
+					s2 = final_state
+				re = re_list[i]
+				re.build_machine(m, s1, s2, match_bol, nocase)
+				s1 = s2
+				match_bol = re.match_nl or (match_bol and re.nullable)
+
+	def calc_str(self):
+		return "Seq(%s)" % string.join(map(str, self.re_list), ",")
+
+
+class Alt(RE):
+	"""Alt(re1, re2, re3...) is an RE which matches either |re1| or
+	|re2| or |re3|..."""
+
+	def __init__(self, *re_list):
+		self.re_list = re_list
+		nullable = 0
+		match_nl = 0
+		nullable_res = []
+		non_nullable_res = []
+		i = 1
+		for re in re_list:
+			self.check_re(i, re)
+			if re.nullable:
 	
