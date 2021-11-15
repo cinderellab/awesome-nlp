@@ -263,4 +263,45 @@ class _RawNewline(RE):
 		if match_bol:
 			initial_state = self.build_opt(m, initial_state, BOL)
 		s = self.build_opt(m, initial_state, EOL)
-		s.add_transition((nl_code, nl_code + 1)
+		s.add_transition((nl_code, nl_code + 1), final_state)
+
+RawNewline = _RawNewline()
+
+
+class SpecialSymbol(RE):
+	"""
+	SpecialSymbol(sym) is an RE which matches the special input
+	symbol |sym|, which is one of BOL, EOL or EOF.
+	"""
+	nullable = 0
+	match_nl = 0
+	sym = None
+
+	def __init__(self, sym):
+		self.sym = sym
+
+	def build_machine(self, m, initial_state, final_state, match_bol, nocase):
+		# Sequences 'bol bol' and 'bol eof' are impossible, so only need
+		# to allow for bol if sym is eol
+		if match_bol and self.sym == EOL:
+			initial_state = self.build_opt(m, initial_state, BOL)
+		initial_state.add_transition(self.sym, final_state)
+
+
+class Seq(RE):
+	"""Seq(re1, re2, re3...) is an RE which matches |re1| followed by
+	|re2| followed by |re3|..."""
+
+	def __init__(self, *re_list):
+		nullable = 1
+		for i in xrange(len(re_list)):
+			re = re_list[i]
+			self.check_re(i, re)
+			nullable = nullable and re.nullable
+		self.re_list = re_list
+		self.nullable = nullable
+		i = len(re_list)
+		match_nl = 0
+		while i:
+			i = i - 1
+	
