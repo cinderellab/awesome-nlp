@@ -423,4 +423,48 @@ class SwitchCase(RE):
 #	 Composite RE constructors
 #	 -------------------------
 #
-#	 These REs are defined in terms of the 
+#	 These REs are defined in terms of the primitive REs.
+#
+
+Empty = Seq()
+Empty.__doc__ = \
+	"""
+	Empty is an RE which matches the empty string.
+	"""
+Empty.str = "Empty"
+
+def Str1(s):
+	"""
+	Str1(s) is an RE which matches the literal string |s|.
+	"""
+	result = apply(Seq, tuple(map(Char, s)))
+	result.str = "Str(%s)" % repr(s)
+	return result
+
+def Str(*strs):
+	"""
+	Str(s) is an RE which matches the literal string |s|.
+	Str(s1, s2, s3, ...) is an RE which matches any of |s1| or |s2| or |s3|...
+	"""
+	if len(strs) == 1:
+		return Str1(strs[0])
+	else:
+		result = apply(Alt, tuple(map(Str1, strs)))
+		result.str = "Str(%s)" % string.join(map(repr, strs), ",")
+		return result
+
+def Any(s):
+	"""
+	Any(s) is an RE which matches any character in the string |s|.
+	"""
+	#result = apply(Alt, tuple(map(Char, s)))
+	result = CodeRanges(chars_to_ranges(s))
+	result.str = "Any(%s)" % repr(s)
+	return result
+
+def AnyBut(s):
+	"""
+	AnyBut(s) is an RE which matches any character (including
+	newline) which is not in the string |s|.
+	"""
+	ranges = ch
