@@ -467,4 +467,40 @@ def AnyBut(s):
 	AnyBut(s) is an RE which matches any character (including
 	newline) which is not in the string |s|.
 	"""
-	ranges = ch
+	ranges = chars_to_ranges(s)
+	ranges.insert(0, -maxint)
+	ranges.append(maxint)
+	result = CodeRanges(ranges)
+	result.str = "AnyBut(%s)" % repr(s)
+	return result
+
+AnyChar = AnyBut("")
+AnyChar.__doc__ = \
+	"""
+	AnyChar is an RE which matches any single character (including a newline).
+	"""
+AnyChar.str = "AnyChar"
+
+def Range(s1, s2 = None):
+	"""
+	Range(c1, c2) is an RE which matches any single character in the range
+	|c1| to |c2| inclusive.
+	Range(s) where |s| is a string of even length is an RE which matches
+	any single character in the ranges |s[0]| to |s[1]|, |s[2]| to |s[3]|,...
+	"""
+	if s2:
+		result = CodeRange(ord(s1), ord(s2) + 1)
+		result.str = "Range(%s,%s)" % (s1, s2)
+	else:
+		ranges = []
+		for i in range(0, len(s1), 2):
+			ranges.append(CodeRange(ord(s1[i]), ord(s1[i+1]) + 1))
+		result = apply(Alt, tuple(ranges))
+		result.str = "Range(%s)" % repr(s1)
+	return result
+
+def Opt(re):
+	"""
+	Opt(re) is an RE which matches either |re| or the empty string.
+	"""
+	result 
