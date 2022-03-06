@@ -147,3 +147,106 @@ class TransitionMap:
       return hi
   
   def get_special(self, event):
+    """
+    Get state set for special event, adding a new entry if necessary.
+    """
+    special = self.special
+    set = special.get(event, None)
+    if not set:
+      set = {}
+      special[event] = set
+    return set
+
+  # --------------------- Conversion methods -----------------------
+  
+  def __str__(self):
+    map_strs = []
+    map = self.map
+    n = len(map)
+    i = 0
+    while i < n:
+      code = map[i]
+      if code == -maxint:
+        code_str = "-inf"
+      elif code == maxint:
+        code_str = "inf"
+      else:
+        code_str = str(code)
+      map_strs.append(code_str)
+      i = i + 1
+      if i < n:
+        map_strs.append(state_set_str(map[i]))
+      i = i + 1
+    special_strs = {}
+    for event, set in self.special.items():
+      special_strs[event] = state_set_str(set)
+    return "[%s]+%s" % (
+      string.join(map_strs, ","), 
+      special_strs
+    )
+  
+  # --------------------- Debugging methods -----------------------
+  
+  def check(self):
+    """Check data structure integrity."""
+    if not self.map[-3] < self.map[-1]:
+      print self
+      assert 0
+  
+  def dump(self, file):
+    map = self.map
+    i = 0
+    n = len(map) - 1
+    while i < n:
+      self.dump_range(map[i], map[i + 2], map[i + 1], file)
+      i = i + 2
+    for event, set in self.special.items():
+      if set:
+        if not event:
+          event = 'empty'
+        self.dump_trans(event, set, file)
+  
+  def dump_range(self, code0, code1, set, file):
+    if set:
+      if code0 == -maxint:
+        if code1 == maxint:
+          k = "any"
+        else:
+          k = "< %s" % self.dump_char(code1)
+      elif code1 == maxint:
+        k = "> %s" % self.dump_char(code0 - 1)
+      elif code0 == code1 - 1:
+        k = self.dump_char(code0)
+      else:
+        k = "%s..%s" % (self.dump_char(code0), 
+          self.dump_char(code1 - 1))
+      self.dump_trans(k, set, file)
+  
+  def dump_char(self, code):
+    if 0 <= code <= 255:
+      return repr(chr(code))
+    else:
+      return "chr(%d)" % code
+  
+  def dump_trans(self, key, set, file):
+    file.write("      %s --> %s\n" % (key, self.dump_set(set)))
+  
+  def dump_set(self, set):
+    return state_set_str(set)
+
+#
+#   State set manipulation functions
+#
+
+#def merge_state_sets(set1, set2):
+#		for state in set2.keys():
+#			set1[state] = 1
+
+def state_set_str(set):
+  state_list = set.keys()
+  str_list = []
+  for state in state_list:
+    str_list.append("S%d" % state.number)
+  return "[%s]" % string.join(str_list, ",")
+  
+    
