@@ -503,4 +503,55 @@ def Opt(re):
 	"""
 	Opt(re) is an RE which matches either |re| or the empty string.
 	"""
-	result 
+	result = Alt(re, Empty)
+	result.str = "Opt(%s)" % re
+	return result
+
+def Rep(re):
+	"""
+	Rep(re) is an RE which matches zero or more repetitions of |re|.
+	"""
+	result = Opt(Rep1(re))
+	result.str = "Rep(%s)" % re
+	return result
+
+def NoCase(re):
+	"""
+	NoCase(re) is an RE which matches the same strings as RE, but treating
+	upper and lower case letters as equivalent.
+	"""
+	return SwitchCase(re, nocase = 1)
+
+def Case(re):
+	"""
+	Case(re) is an RE which matches the same strings as RE, but treating
+	upper and lower case letters as distinct, i.e. it cancels the effect 
+	of any enclosing NoCase().
+	"""
+	return SwitchCase(re, nocase = 0)
+
+#
+#	 RE Constants
+#
+	
+Bol = Char(BOL)
+Bol.__doc__ = \
+	"""
+	Bol is an RE which matches the beginning of a line.
+	"""
+Bol.str = "Bol"
+
+Eol = Char(EOL)
+Eol.__doc__ = \
+	"""
+	Eol is an RE which matches the end of a line.
+	"""
+Eol.str = "Eol"
+
+Eof = Char(EOF)
+Eof.__doc__ = \
+	"""
+	Eof is an RE which matches the end of the file.
+	"""
+Eof.str = "Eof"
+
