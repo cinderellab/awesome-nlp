@@ -24,4 +24,40 @@ File Overview
 =============
 - debug.py          -- for the pretty print debug function
 - grammar_fsm.py    -- contains the FSM for the semantics
-- help.py           -- will contain help in the f
+- help.py           -- will contain help in the future
+- lg_fsm.py         -- the old finite state machine for link grammar
+- lg_py.c           -- the C module
+- lg_test.py        -- the core file currently
+- semantic_rules.py -- contains all the semantic rules
+- semantics.py      -- parser to retrieve the semantic rules from RelEx
+- setup.py          -- to compile the C module
+
+TO-DO
+=====
+- [x] Hypergraph data structure (atoms)
+- [x] Atom algorithms
+- [x] Tree printer
+- [x] Generic sentence container
+- [/] Rule engine
+-  -- [x] "Feature paths"
+- [ ] Support vector machine for analysis
+- [ ] Rule engine output analyzer
+- [x] Implement part of speech tagger
+- [ ] Word tense tagger
+- [ ] Emoticon tagger
+- [ ] Frame analysis
+- -- [ ] Rete algorithm
+- [ ] First order logic prover integration
+- [ ] Spelling correction (pre-link grammar)
+- [ ] Hobbs anaphora [Hobbs1976]
+
+
+
+- http://code.google.com/p/hobbs-algorithm/source/browse/#svn/trunk
+
+License
+=======
+Copyright (C) 2009 Alex Toney
+
+This program is free software; you can redistribute it and/or
+modify it under t
