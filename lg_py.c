@@ -93,4 +93,49 @@ static int Sentence_init(Sentence *self, PyObject *args, PyObject *kwds){
     PyObject *span_list = NULL;
     PyObject *links_list = NULL;
     PyObject *tag_list = NULL;
-  
+    PyObject *tag_pair_list = NULL;
+    
+    static char *kwlist[] = {"word_list", "span_list",
+     "links_list", "tag_list", "tag_pair_list", NULL};
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "|OOOOO", kwlist, 
+                                      &first, &last, 
+                                      &self->number))
+        return -1; 
+
+    if (first) {
+        tmp = self->first;
+        Py_INCREF(first);
+        self->first = first;
+        Py_XDECREF(tmp);
+    }
+
+    if (last) {
+        tmp = self->last;
+        Py_INCREF(last);
+        self->last = last;
+        Py_XDECREF(tmp);
+    }
+
+    return 0;
+}
+
+*/
+
+
+/// This is the basic sentence dissection
+static PyObject *sentence(PyObject *self, PyObject *args){
+    Dictionary    dict;
+    Parse_Options opts;
+    Sentence      sent;
+    Linkage       linkage;
+    Linkage       sub_linkage;
+    char *        diagram;
+
+    /// Link counts
+    int   num_linkages;
+    int   links;
+
+    ///  Index's for the iterators
+    int   link_idx;
+    int   word_idx;
