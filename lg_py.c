@@ -179,4 +179,29 @@ static PyObject *sentence(PyObject *self, PyObject *args){
     
     sent = sentence_create(text, dict);
     sentence_split(sent, opts);
-    num_linkages = 
+    num_linkages = sentence_parse(sent, opts);
+
+    if (num_linkages > 0) {
+        linkage = linkage_create(0, sent, opts);
+        /// Get the lengths of everything
+        num_words = linkage_get_num_words(linkage);
+        links = linkage_get_num_links(linkage);
+
+        for(link_idx=0; link_idx < links; link_idx++){
+                PyObject *temp_subLen;
+
+                diagram = linkage_print_diagram(linkage);
+                _diagram = PyString_FromString(diagram);
+
+                sub_linkage = linkage_create(link_idx, sent, opts);
+                sub_linkages = linkage_get_num_sublinkages(linkage);
+
+                temp_subLen = PyLong_FromLong(sub_linkages);
+                linkage_delete(sub_linkage);
+                PyList_Append(sublinkage_list, temp_subLen);
+
+                span = linkage_get_link_length(linkage, link_idx);
+                PyList_Append(span_list, PyInt_FromLong(span));
+                
+                PyObject *temp_list;
+                temp_list = PyL
