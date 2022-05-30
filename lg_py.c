@@ -139,3 +139,44 @@ static PyObject *sentence(PyObject *self, PyObject *args){
     ///  Index's for the iterators
     int   link_idx;
     int   word_idx;
+    int   num_words;
+    long   span;
+    long   sub_linkages;
+
+    const char *text;
+    const char *d_output;
+
+    PyObject *output_list;
+    PyObject *word_list;
+    PyObject *word2_list;
+    PyObject *span_list;
+    PyObject *temp;
+    PyObject *sublinkage_list;
+    PyObject *_diagram;
+
+    output_list = PyList_New(0);
+    word_list   = PyList_New(0);
+    word2_list  = PyList_New(0);
+    sublinkage_list = PyList_New(0);
+
+    span_list = PyList_New(0);
+
+    if (!PyArg_ParseTuple(args, "s", &text))
+        return NULL;
+
+    opts = parse_options_create();
+    parse_options_set_verbosity(opts, -1);
+    parse_options_set_screen_width(opts, 50);
+
+    setlocale(LC_ALL, "");
+    dict = dictionary_create_default_lang();
+
+    if (!dict) {
+        PyErr_SetString(PyExc_RuntimeError, "Fatal error: Unable to open the dictionary");
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+    
+    sent = sentence_create(text, dict);
+    sentence_split(sent, opts);
+    num_linkages = 
