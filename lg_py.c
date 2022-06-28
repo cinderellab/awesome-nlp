@@ -231,4 +231,48 @@ static PyObject *sentence(PyObject *self, PyObject *args){
                 PyList_Append(word_list, word);
             }
 
-            linkage_f
+            linkage_free_diagram(diagram);
+            linkage_delete(linkage);
+
+     } else{
+        sentence_delete(sent);
+        dictionary_delete(dict);
+        parse_options_delete(opts);
+ 
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
+    sentence_delete(sent);
+    dictionary_delete(dict);
+    parse_options_delete(opts);
+
+    return Py_BuildValue("SSSSSS", word_list, span_list, output_list, word2_list, sublinkage_list, _diagram);
+} 
+
+struct CNode_s {
+  const char  * label;
+  CNode * child;
+  CNode * next;
+  int   start, end;
+};
+
+PyObject *build_tree(CNode *n, Linkage linkage){
+    CNode * m;
+    int word_num = 1;
+    PyObject *output;
+    PyObject *temp;
+
+    //PyObject *t2;
+    //PyObject *t1;
+    output = PyList_New(0);
+    // sentence_get_word(Sentence sent, int wordnum)
+    //static char * spacer=" ";
+
+    if (n == NULL){
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+    for (m=n->child; m!=NULL; m=m->next) {
+        //PyObject *t1;
+        //t1 = PyList_N
