@@ -204,4 +204,31 @@ static PyObject *sentence(PyObject *self, PyObject *args){
                 PyList_Append(span_list, PyInt_FromLong(span));
                 
                 PyObject *temp_list;
-                temp_list = PyL
+                temp_list = PyList_New(0);
+                /// Sub Group these (left and right labels)
+                const char *t1 = linkage_get_link_llabel(linkage, link_idx);
+                temp = PyString_FromString(t1);
+                PyList_Append(temp_list, temp);
+
+                const char *t2 = linkage_get_link_rlabel(linkage, link_idx);
+                temp = PyString_FromString(t2);
+                PyList_Append(temp_list, temp);
+                /// Then add to the main list
+                PyList_Append(output_list, temp_list);
+                
+
+                /// Just the label
+                const char *t3 = linkage_get_link_label(linkage, link_idx);
+                temp = PyString_FromString(t3);
+                PyList_Append(word2_list, temp);
+            }
+            
+            for(word_idx=0; word_idx < num_words; word_idx++){
+                d_output = linkage_get_word(linkage, word_idx);
+                PyObject *word;
+
+                word = PyString_FromString(d_output);
+                PyList_Append(word_list, word);
+            }
+
+            linkage_f
