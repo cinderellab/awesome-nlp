@@ -275,4 +275,37 @@ PyObject *build_tree(CNode *n, Linkage linkage){
     }
     for (m=n->child; m!=NULL; m=m->next) {
         //PyObject *t1;
-        //t1 = PyList_N
+        //t1 = PyList_New(0);
+        if (m->child == NULL) {
+            temp = PyString_FromString(m->label);
+            //PyList_Append(t1, temp);
+        }
+        else {
+            temp = build_tree(m, linkage);
+            //PyList_Append(t1, temp);
+        }
+        /*PyObject *temp_list;
+        PyObject *temp2_list;
+        temp_list = PyList_New(0);
+        temp2_list = PyList_New(0);
+
+        const char *t3 = linkage_get_link_llabel(linkage, word_num);
+        const char *t4 = linkage_get_link_rlabel(linkage, word_num);
+        
+        t1 = PyString_FromString(t3);
+        t2 = PyString_FromString(t4);
+        PyList_Append(temp_list, t1);
+        PyList_Append(temp_list, t2);
+        PyList_Append(temp2_list, temp);
+        PyList_Append(temp2_list, temp_list);
+        //PyDict_SetItem(output, temp, t2);
+        PyList_Append(output, temp2_list);
+        */
+        PyList_Append(output, temp);
+        word_num++;
+    }
+    Py_XINCREF(output);
+    return output;
+}
+
+static PyObject *constituents(PyObject *self, PyObje
