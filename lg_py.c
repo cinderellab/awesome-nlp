@@ -349,4 +349,48 @@ static PyObject *constituents(PyObject *self, PyObject *args){
              output_list = build_tree(cn, linkage);
              if(output_list == Py_None){
                 Py_INCREF(output_list);
-                retur
+                return output_list;
+             }
+             linkage_free_constituent_tree(cn);
+
+             linkage_delete(linkage);
+     } else{
+        sentence_delete(sent);
+        dictionary_delete(dict);
+        parse_options_delete(opts);
+
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+    sentence_delete(sent);
+    dictionary_delete(dict);
+    parse_options_delete(opts);
+
+    return Py_BuildValue("S", output_list);
+} 
+static PyObject *domains(PyObject *self, PyObject *args){
+    Dictionary    dict;
+    Parse_Options opts;
+    Sentence      sent;
+    Linkage       linkage;
+    //CNode *       cn;
+
+    /// Link counts
+    int   num_linkages;
+    int   links;
+    int   i;
+    int   j = 0;
+    int num_domains;
+    const char *text;
+
+    PyObject *output_list;
+    PyObject *temp;
+    output_list = PyList_New(0);
+
+    if (!PyArg_ParseTuple(args, "s", &text))
+        return NULL;
+
+    opts = parse_options_create();
+    parse_options_set_verbosity(opts, -1);
+
+    setlocale(LC_ALL, "");
