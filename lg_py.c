@@ -420,4 +420,37 @@ static PyObject *domains(PyObject *self, PyObject *args){
                 }
                 j = 0;
              }
-             linkage_de
+             linkage_delete(linkage);
+     } else{
+        sentence_delete(sent);
+        dictionary_delete(dict);
+        parse_options_delete(opts);
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+    sentence_delete(sent);
+    dictionary_delete(dict);
+    parse_options_delete(opts);
+
+    return Py_BuildValue("Si", output_list, num_domains);
+} 
+
+PyMethodDef methods[] = {
+    {"sentence", sentence, METH_VARARGS, ""},
+    {"constituents", constituents, METH_VARARGS, ""},
+    {"domains", domains, METH_VARARGS, ""},
+    {NULL, NULL, 0, NULL},
+};
+
+PyMODINIT_FUNC initlinkGrammar(void){
+    //PyObject* m;
+    //linkgrammar_SentenceType.tp_new = PyType_GenericNew;
+    //if (PyType_Ready(&linkgrammar_SentenceType) < 0)
+    //    return;
+
+    (void) Py_InitModule("linkGrammar", methods);
+
+    //Py_INCREF(&linkgrammar_SentenceType);
+    //PyModule_AddObject(m, "Sentence", (PyObject *)&linkgrammar_SentenceType);
+
+}
