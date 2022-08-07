@@ -394,3 +394,30 @@ static PyObject *domains(PyObject *self, PyObject *args){
     parse_options_set_verbosity(opts, -1);
 
     setlocale(LC_ALL, "");
+    dict = dictionary_create_default_lang();
+
+    if (!dict) {
+        PyErr_SetString(PyExc_RuntimeError, "Fatal error: Unable to open the dictionary");
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+    
+    sent = sentence_create(text, dict);
+    sentence_split(sent, opts);
+    num_linkages = sentence_parse(sent, opts);
+
+    if (num_linkages > 0) {
+             linkage = linkage_create(0, sent, opts);
+             links = linkage_get_num_sublinkages(linkage);
+             for(i=0; i<=links; i++){
+                num_domains = linkage_get_link_num_domains(linkage, i);
+                const char **temp1 = linkage_get_link_domain_names(linkage, i);
+                //for(j=0; j<=num_domains; j++){
+                while(num_domains < j){ 
+                    temp = PyString_FromString(temp1[j]);
+                    PyList_Append(output_list, temp);
+                    j++;
+                }
+                j = 0;
+             }
+             linkage_de
