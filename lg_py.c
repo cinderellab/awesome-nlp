@@ -308,4 +308,45 @@ PyObject *build_tree(CNode *n, Linkage linkage){
     return output;
 }
 
-static PyObject *constituents(PyObject *self, PyObje
+static PyObject *constituents(PyObject *self, PyObject *args){
+    Dictionary    dict;
+    Parse_Options opts;
+    Sentence      sent;
+    Linkage       linkage;
+    CNode *       cn;
+
+    /// Link counts
+    int   num_linkages;
+
+
+    const char *text;
+
+    PyObject *output_list;
+
+    if (!PyArg_ParseTuple(args, "s", &text))
+        return NULL;
+
+    opts = parse_options_create();
+    parse_options_set_verbosity(opts, -1);
+
+    setlocale(LC_ALL, "");
+    dict = dictionary_create_default_lang();
+
+    if (!dict) {
+        PyErr_SetString(PyExc_RuntimeError, "Fatal error: Unable to open the dictionary");
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+    
+    sent = sentence_create(text, dict);
+    sentence_split(sent, opts);
+    num_linkages = sentence_parse(sent, opts);
+
+    if (num_linkages > 0) {
+             linkage = linkage_create(0, sent, opts);
+            
+             cn = linkage_constituent_tree(linkage);
+             output_list = build_tree(cn, linkage);
+             if(output_list == Py_None){
+                Py_INCREF(output_list);
+                retur
