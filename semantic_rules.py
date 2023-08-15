@@ -490,4 +490,17 @@ semantic_rules = {
                                               '<F_L ref links _pobj name> = _$qVar',
                                               '<F_L ref links _pobj nameSource> = %',
                                               '<F_L ref links _pobj nameSource> = <F_L>',
-               
+                                              '<F_L ref links _pobj QUERY-TYPE> = when',
+                                              '<F_L ref tense> = <F_R ref tense>',
+                                              '<F_L head-word> = <F_L>'],
+                                 'regex': ['= PF\.*'],
+                                 'match': ['<F_L str> = when']},
+ 'SPECIAL_PREP_RULE_WHERE': {'set': ['<F_L ref name> = %',
+                                          '<F_L ref name> = _%atLocation'],
+                             'regex': ['= PF\.*'],
+                             'match': ['<F_L str> = where']},
+ 'SPECIAL_PREP_RULE_WHERE_WHERE': {'set': ['<F_L ref SPECIAL-PREP-FLAG> = T',
+                                                '<F_L ref links _psubj> = <F_R ref links _subj>',
+                                                '<F_L ref links _pobj name> = _$qVar',
+                                                '<F_L ref links _pobj nameSource> = %',
+                                          
