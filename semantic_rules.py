@@ -610,4 +610,16 @@ semantic_rules = {
                       '<F_L ref name> = _$qVar',
                       '<F_L ref QUERY-TYPE> = why',
                       '<F_L head-question-word ref links _%because> = <F_L ref>'],
-       
+         'regex': ['= Q'],
+         'match': ['<F_L str> = Why|why', '<F_L head-question-word> != %']},
+ 'WILL_TODO': {'set': ['<DROP-REF-FLAG> = T'],
+               'regex': [],
+               'match': ['<links _to-do> != %',
+                       '<links _subj> != %',
+                       '<name> = go',
+                       '<HYP> = T',
+                       '<tense> = present_progressive']},
+ 'WILL_TODO_FUTURE': {'set': ['<NEXT NEXT head tense> = future'],
+                      'regex': [],
+                      'match': ['<head DROP-REF-FLAG> = T',
+                              '<NEXT NEXT head tense> = infinitive']}}
