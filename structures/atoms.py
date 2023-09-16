@@ -88,4 +88,31 @@ class Atoms:
                 tail_id=G.tail(edge)
                 self.add_edge(G_node, tail_id, G.edge_data(edge))
 
-    #--Creates a new node with id node_id.  Arbitrary d
+    #--Creates a new node with id node_id.  Arbitrary data can be attached
+    #--to the node via the node_data parameter.
+    def add_node(self, node_id, node_data=None, ignore_dupes=False):
+        if (not self.nodes.has_key(node_id)) and (not self.hidden_nodes.has_key(node_id)):
+            self.nodes[node_id]=([],[],node_data)
+        else:
+            if not ignore_dupes:
+                raise GraphException('Duplicate Node: %s', node_id)
+
+    #--Deletes the node and all in and out arcs.
+    def delete_node(self, node_id):
+        #--Remove fanin connections.
+        in_edges=self.in_arcs(node_id)
+        for edge in in_edges:
+            self.delete_edge(edge)
+        #--Remove fanout connections.
+        out_edges = self.out_arcs(node_id)
+        for edge in out_edges:
+            self.delete_edge(edge)
+        #--Delete node.
+        del self.nodes[node_id]
+
+    #--Delets the edge.
+    def delete_edge(self, edge_id):
+        head_id = self.head(edge_id)
+        tail_id = self.tail(edge_id)
+        head_data = map(None, self.nodes[head_id])
+        tail_data = map(Non
