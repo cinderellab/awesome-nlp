@@ -115,4 +115,28 @@ class Atoms:
         head_id = self.head(edge_id)
         tail_id = self.tail(edge_id)
         head_data = map(None, self.nodes[head_id])
-        tail_data = map(Non
+        tail_data = map(None, self.nodes[tail_id])
+        head_data[1].remove(edge_id)
+        tail_data[0].remove(edge_id)
+        del self.edges[edge_id]
+
+    #--Adds an edge (head_id, tail_id).
+    #--Arbitrary data can be attached to the edge via edge_data
+    def add_edge(self, head_id, tail_id, edge_data=None):
+        edge_id = self.next_edge_id
+        self.next_edge_id = self.next_edge_id + 1
+        self.edges[edge_id] = (head_id, tail_id, edge_data)
+        try:
+            mapped_head_data = map(None, self.nodes[head_id])
+            mapped_head_data[1].append(edge_id)
+            mapped_tail_data = map(None, self.nodes[tail_id])
+            mapped_tail_data[0].append(edge_id)
+        except Exception, E:
+            raise GraphException('Exception %s nodes: %s' % (E, self.nodes))
+        
+        return edge_id
+
+    #--Removes the edge from the normal graph, but does not delete
+    #--its information.  The edge is held in a separate structure
+    #--and can be unhidden at some later time.
+    def hide_edge(self, e
