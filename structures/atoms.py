@@ -193,4 +193,37 @@ class Atoms:
         hidden_node_list=self.nodes.keys()
         for node in hidden_node_list:
             self.nodes[node]=self.hidden_nodes[node]
-  
+            del self.hidden_nodes[node]
+
+    #--Returns 1 if the node_id is in the graph and 0 otherwise.
+    def has_node(self, node_id):
+        if self.nodes.has_key(node_id):
+            return 1
+        else:
+            return 0
+
+    #--Returns the edge that connects (head_id,tail_id)
+    def edge(self, head_id, tail_id):
+        out_edges=self.out_arcs(head_id)
+        for edge in out_edges:
+            if self.tail(edge) == tail_id:
+                return edge
+        raise 'Graph_no_edge', (head_id, tail_id)
+        #print "WARNING: No edge to return."
+        
+    def neighbors(self, node_id):
+        return self.out_arcs(node_id)
+        
+    def number_of_nodes(self):
+        return len(self.nodes.keys())
+
+    def number_of_edges(self):
+        return len(self.edges.keys())
+
+    #--Return a list of the node id's of all visible nodes in the graph.
+    def node_list(self):
+        nl = self.nodes.keys()
+        return nl[:]	
+
+    #--Similar to above.
+    def edge_list(
