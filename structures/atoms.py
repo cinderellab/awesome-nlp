@@ -166,4 +166,31 @@ class Atoms:
         ed = map(None,self.hidden_edges[edge_id])
         head_id = ed[0]
         tail_id = ed[1]
-        hd=map(None,
+        hd=map(None,self.nodes[head_id])
+        td=map(None,self.nodes[tail_id])
+        hd[1].append(edge_id)
+        td[0].append(edge_id)
+        del self.hidden_edges[edge_id]
+
+    #--Restores all hidden edges.
+    def restore_all_edges(self):
+        hidden_edge_list=self.hidden_edges.keys()
+        for edge in hidden_edge_list:
+            self.restore_edge(edge)
+
+    #--Restores a previously hidden node back into the graph
+    #--and restores all of the hidden incident edges, too.	
+    def restore_node(self, node_id):
+        hidden_node_data=map(None,self.hidden_nodes[node_id])
+        self.nodes[node_id]=hidden_node_data[0]
+        degree_list=hidden_node_data[1]
+        for edge in degree_list:
+            self.restore_edge(edge)
+        del self.hidden_nodes[node_id]
+
+    #--Restores all hidden nodes.
+    def restore_all_nodes(self):
+        hidden_node_list=self.nodes.keys()
+        for node in hidden_node_list:
+            self.nodes[node]=self.hidden_nodes[node]
+  
