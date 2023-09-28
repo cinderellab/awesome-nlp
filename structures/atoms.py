@@ -226,4 +226,35 @@ class Atoms:
         return nl[:]	
 
     #--Similar to above.
-    def edge_list(
+    def edge_list(self):
+        el = self.edges.keys()
+        return el[:]
+
+    def number_of_hidden_edges(self):
+        return len(self.hidden_edges.keys())
+
+    def number_of_hidden_nodes(self):
+        return len(self.hidden_nodes.keys())
+
+    def hidden_node_list(self):
+        hnl=self.hidden_nodes.keys()
+        return hnl[:]
+
+    def hidden_edge_list(self):
+        hel=self.hidden_edges.keys()
+        return hel[:]
+
+    #--Returns a reference to the data attached to a node.
+    def node_data(self, node_id):
+        mapped_data=map(None, self.nodes[node_id])
+        return mapped_data[2]
+
+    #--Returns a reference to the data attached to an edge.
+    def edge_data(self, edge_id):
+        mapped_data=map(None, self.edges[edge_id])
+        return mapped_data[2]
+
+    #--Returns a reference to the head of the edge.  (A reference to the head id)
+    def head(self, edge):
+        mapped_data = map(None, self.edges[edge])
+        retur
