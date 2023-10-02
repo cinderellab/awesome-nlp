@@ -322,4 +322,26 @@ class Atoms:
                 topological_queue.add(node)
             else:
                 indeg_nodes[node]=indeg
-        wh
+        while not topological_queue.empty():
+            current_node = topological_queue.remove()
+            topological_list.append(current_node)
+            out_edges = self.out_arcs(current_node)
+            for edge in out_edges:
+                tail = self.tail(edge)
+                indeg_nodes[tail] = indeg_nodes[tail]-1
+                if indeg_nodes[tail] == 0:
+                    topological_queue.add(tail)
+        #--Check to see if all nodes were covered.
+        if len(topological_list) != len(node_list):
+            raise GraphException(topological_list)
+        return topological_list
+
+    #--Performs a reverse topological sort by iteratively "removing" nodes with out_degree=0
+    #--If the graph is cyclic, this method throws Graph_topological_error with the list of
+    #--successfully ordered nodes.
+    def reverse_topological_sort(self):
+        topological_list  = []
+        topological_queue = Queue()
+        outdeg_nodes = {}
+        node_list = self.nodes.keys()
+        for node in node_
