@@ -257,4 +257,38 @@ class Atoms:
     #--Returns a reference to the head of the edge.  (A reference to the head id)
     def head(self, edge):
         mapped_data = map(None, self.edges[edge])
-        retur
+        return mapped_data[0]	
+
+    #--Similar to above.
+    def tail(self, edge):
+        mapped_data=map(None, self.edges[edge])
+        return mapped_data[1]
+
+    #--Returns a copy of the list of edges of the node's out arcs.
+    def out_arcs(self, node_id):
+        mapped_data = map(None, self.nodes[node_id])
+        return mapped_data[1][:]	
+
+    #--Similar to above.
+    def in_arcs(self, node_id):
+        mapped_data = map(None, self.nodes[node_id])
+        return mapped_data[0][:]
+
+    def arc_pairs(self, node_id):
+        for x in self.in_arcs(node_id):
+            for y in self.out_arcs(node_id):
+                yield (x,y)
+        
+    #--Returns a list of in and out arcs.
+    def arc_list(self, node_id):
+        in_list  = self.in_arcs(node_id)
+        out_list = self.out_arcs(node_id)
+        deg_list = []
+        for arc in in_list:
+            deg_list.append(arc)
+        for arc in out_list:
+            deg_list.append(arc)
+        return deg_list
+
+
+    def out_degree(self,
