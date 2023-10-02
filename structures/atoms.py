@@ -291,4 +291,35 @@ class Atoms:
         return deg_list
 
 
-    def out_degree(self,
+    def out_degree(self, node_id):
+        mapped_data = map(None, self.nodes[node_id])
+        return len(mapped_data[1])
+
+    def in_degree(self, node_id):
+        mapped_data = map(None, self.nodes[node_id])
+        return len(mapped_data[0])
+
+    def degree(self, node_id):
+        mapped_data=map(None, self.nodes[node_id])
+        return len(mapped_data[0])+len(mapped_data[1])	
+
+    def is_cyclic(self):
+        pass
+    
+    # --- Traversals ---
+
+    #--Performs a topological sort of the nodes by "removing" nodes with indegree 0.
+    #--If the graph has a cycle, the Graph_topological_error is thrown with the
+    #--list of successfully ordered nodes.
+    def topological_sort(self):
+        topological_list  = []
+        topological_queue = Queue()
+        indeg_nodes = {}
+        node_list=self.nodes.keys()
+        for node in node_list:
+            indeg = self.in_degree(node)
+            if indeg == 0:
+                topological_queue.add(node)
+            else:
+                indeg_nodes[node]=indeg
+        wh
