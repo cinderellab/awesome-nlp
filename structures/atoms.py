@@ -372,4 +372,29 @@ class Atoms:
 
         dfs_stack.push(source_id)
 
-     
+        while not dfs_stack.empty():
+            current_node = dfs_stack.pop()
+            dfs_list.append(current_node)
+            out_edges = self.out_arcs(current_node)
+            for edge in out_edges:
+                if not nodes_already_stacked.has_key(self.tail(edge)):
+                    nodes_already_stacked[self.tail(edge)] = 0
+                    dfs_stack.push(self.tail(edge))
+                    
+        return dfs_list
+
+    #--Returns a list of nodes in some BFS order.
+    def bfs(self, source_id):
+        nodes_already_queued={source_id:0}
+        bfs_list  = []
+        bfs_queue = Queue()
+        bfs_queue.add(source_id)	
+
+        while not bfs_queue.empty():
+            current_node = bfs_queue.remove()
+            bfs_list.append(current_node)
+            out_edges = self.out_arcs(current_node)
+            for edge in out_edges:
+                if not nodes_already_queued.has_key(self.tail(edge)):
+                    nodes_already_queued[self.tail(edge)]=0
+                
