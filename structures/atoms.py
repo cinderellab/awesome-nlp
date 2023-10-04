@@ -344,4 +344,32 @@ class Atoms:
         topological_queue = Queue()
         outdeg_nodes = {}
         node_list = self.nodes.keys()
-        for node in node_
+        for node in node_list:
+            outdeg = self.out_degree(node)
+            if outdeg == 0:
+                topological_queue.add(node)
+            else:
+                outdeg_nodes[node] = outdeg
+        while not topological_queue.empty():
+            current_node = topological_queue.remove()
+            topological_list.append(current_node)			
+            in_edges = self.in_arcs(current_node)
+            for edge in in_edges:
+                head_id = self.head(edge)
+                outdeg_nodes[head_id] = outdeg_nodes[head_id]-1
+                if outdeg_nodes[head_id] == 0:
+                    topological_queue.add(head_id)
+        #--Sanity check.
+        if len(topological_list) != len(node_list):
+            raise Graph_topological_error, topological_list
+        return topological_list
+
+    #--Returns a list of nodes in some DFS order.
+    def dfs(self, source_id):
+        nodes_already_stacked = {source_id:0}
+        dfs_list  = []		
+        dfs_stack = Stack()
+
+        dfs_stack.push(source_id)
+
+     
