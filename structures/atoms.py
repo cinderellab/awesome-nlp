@@ -397,4 +397,26 @@ class Atoms:
             for edge in out_edges:
                 if not nodes_already_queued.has_key(self.tail(edge)):
                     nodes_already_queued[self.tail(edge)]=0
-                
+                    bfs_queue.add(self.tail(edge))
+                    
+        return bfs_list
+
+
+    #--Returns a list of nodes in some BACKWARDS BFS order.
+    #--Starting from the source node, BFS proceeds along back edges.
+    def back_bfs(self, source_id):
+        nodes_already_queued = {source_id:0}
+        bfs_list  = []
+        bfs_queue = Queue()
+        bfs_queue.add(source_id)
+
+        while not bfs_queue.empty():
+            current_node = bfs_queue.remove()
+            bfs_list.append(current_node)
+            in_edges = self.in_arcs(current_node)
+            for edge in in_edges:
+                if not nodes_already_queued.has_key(self.head(edge)):
+                    nodes_already_queued[self.head(edge)]=0
+                    bfs_queue.add(self.head(edge))
+
+        return bfs_list
