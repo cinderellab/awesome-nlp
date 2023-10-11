@@ -93,4 +93,33 @@ class FSM:
         # Map (current_state) --> (action, next_state).
         self.state_transitions_any = {}
         self.state_changes = []
- 
+        self.default_transition = None
+
+        self.input_symbol = None
+        self.initial_state = initial_state
+        self.current_state = self.initial_state
+        self.next_state = None
+        self.action = None
+        self.memory = memory
+        self.counter = 0
+
+    def reset (self):
+
+        """This sets the current_state to the initial_state and sets
+        input_symbol to None. The initial state was set by the constructor
+        __init__(). """
+
+        self.current_state = self.initial_state
+        self.input_symbol = None
+        self.counter = 0
+
+
+    def add_transition (self, input_symbol, state, action=None, next_state=None):
+
+        """This adds a transition that associates:
+
+                (input_symbol, current_state) --> (action, next_state)
+
+        The action may be set to None in which case the process() method will
+        ignore the action and only set the next_state. The next_state may be
+        set to None in which case the current state will
