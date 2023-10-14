@@ -31,4 +31,20 @@ class list_functions:
             #print indices, sub_tree
             list_of_indexLists.append(indices)
             for (ordinal, subTree) in enumerate(sub_tree[1:]):
-                d
+                debug(ordinal)
+                debug(subTree)
+                if isinstance(subTree, list):
+                    idxs = indices[:]
+
+                    debug(idxs)
+                    debug(ordinal)
+
+                    if len(idxs) == 0:
+                        tree_indices.append([0])
+                    else:
+                        tree_indices.append(idxs)
+
+                    idxs.append(ordinal+1)
+                    tree.append((idxs, subTree))
+
+        return list_of_indexLists
