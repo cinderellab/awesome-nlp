@@ -169,4 +169,28 @@ class FSM:
 
         """This sets the default transition. This defines an action and
         next_state if the FSM cannot find the input symbol and the current
-        stat
+        state in the transition list and if the FSM cannot find the
+        current_state in the transition_any list. This is useful as a final
+        fall-through state for catching errors and undefined states.
+
+        The default transition can be removed by setting the attribute
+        default_transition to None. """
+
+        self.default_transition = (action, next_state)
+
+    def get_transition (self, input_symbol, state):
+
+        """This returns (action, next state) given an input_symbol and state.
+        This does not modify the FSM state, so calling this method has no side
+        effects. Normally you do not call this method directly. It is called by
+        process().
+
+        The sequence of steps to check for a defined transition goes from the
+        most specific to the least specific.
+
+        1. Check state_transitions[] that match exactly the tuple,
+            (input_symbol, state)
+
+        2. Check state_transitions_any[] that match (state)
+            In other words, match a specific state and ANY input_symbol.
+
