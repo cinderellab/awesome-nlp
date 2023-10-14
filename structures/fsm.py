@@ -215,4 +215,30 @@ class FSM:
 
         """This is the main method that you call to process input. This may
         cause the FSM to change state and call an action. This method calls
-        get_transitio
+        get_transition() to find the action and next_state associated with the
+        input_symbol and current_state. If the action is None then the action
+        is not called and only the current state is changed. This method
+        processes one complete input symbol. You can process a list of symbols
+        (or a string) by calling process_list(). """
+
+        self.input_symbol = input_symbol
+        (self.action, self.next_state) = self.get_transition (self.input_symbol, self.current_state)
+
+        self.current_state = self.next_state
+        self.state_changes.append(self.next_state)
+        self.next_state = None
+        self.counter += 1
+        
+        if self.action is not None:
+            return self.action(self)
+        
+
+
+    def process_list (self, input_symbols):
+
+        """This takes a list and sends each element to process(). The list may
+        be a string or any iterable object. """
+        return_values = []
+        
+        for s in input_symbols:
+        
