@@ -241,4 +241,7 @@ class FSM:
         return_values = []
         
         for s in input_symbols:
-        
+            return_values.append(self.process(s))
+
+        return return_values
+
